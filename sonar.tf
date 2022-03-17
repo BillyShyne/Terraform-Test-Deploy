@@ -3,13 +3,13 @@ resource "aws_instance" "mySonarInstance" {
 
       key_name = var.key_name
       instance_type = "t2.micro"
-      security_groups= [ "security_sonar_group_2022"]
+      security_groups= [ "security_sonar_groupTF_Test"]
       tags= {
         Name = "sonar_instance"
       }
     }
 
- resource "aws_security_group" "security_sonar_group_2022" {
+ resource "aws_security_group" "security_sonar_groupTF_Test" {
       name        = "security_sonar_groupTF_Test"
       description = "security group for Sonar"
 
