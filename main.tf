@@ -1,54 +1,50 @@
-provider "aws" {
-  region = var.aws_region
-}
+resource "aws_instance" "mySonarInstance" {
+      ami           = "ami-0b9064170e32bde34"
 
-#Create security group with firewall rules
-resource "aws_security_group" "my_security_group" {
-  name        = var.security_group
-  description = "security group for Ec2 instance"
+      key_name = var.key_name
+      instance_type = "t2.micro"
+      security_groups= [ "security_sonar_group_2022"]
+      tags= {
+        Name = "sonar_instance"
+      }
+    }
 
-  ingress {
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+ resource "aws_security_group" "security_sonar_group_2022" {
+      name        = "security_sonar_group_2022"
+      description = "security group for Sonar"
 
- ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+      ingress {
+        from_port   = 9000
+        to_port     = 9000
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+      }
 
- # outbound from jenkis server
-  egress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+     ingress {
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+      }
 
-  tags= {
-    Name = var.security_group
-  }
-}
+     # outbound from Sonar server
+      egress {
+        from_port   = 0
+        to_port     = 65535
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+      }
 
-resource "aws_instance" "myFirstInstance" {
-  ami           = var.ami_id
-  key_name = var.key_name
-  instance_type = var.instance_type
-  security_groups= [var.security_group]
-  tags= {
-    Name = var.tag_name
-  }
-}
+      tags= {
+        Name = "security_sonar"
+      }
+    }
 
-# Create Elastic IP address
-resource "aws_eip" "myFirstInstance" {
+# Create Elastic IP address for Sonar instance
+resource "aws_eip" "mySonarInstance" {
   vpc      = true
-  instance = aws_instance.myFirstInstance.id
+  instance = aws_instance.mySonarInstance.id
 tags= {
-    Name = "my_elastic_ip"
+    Name = "sonar_elastic_ip"
   }
 }
