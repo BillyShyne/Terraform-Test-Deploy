@@ -1,5 +1,5 @@
 resource "aws_instance" "mySonarInstance" {
-      ami           = "ami-0b9064170e32bde34"
+      ami           = "ami-0a940cb939351ccca"
 
       key_name = var.key_name
       instance_type = "t2.micro"
@@ -10,7 +10,7 @@ resource "aws_instance" "mySonarInstance" {
     }
 
  resource "aws_security_group" "security_sonar_group_2022" {
-      name        = "security_sonar_group_2022"
+      name        = "security_sonar_groupTF_Test"
       description = "security group for Sonar"
 
       ingress {
